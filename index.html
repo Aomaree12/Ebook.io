@@ -11,31 +11,20 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Kanit', sans-serif;
-      background: linear-gradient(160deg, #f0f7ff 0%, #dbeafe 40%, #eff6ff 100%);
-      min-height: 100vh;
-    }
+    body { font-family: 'Kanit', sans-serif; background: linear-gradient(160deg, #f0f7ff 0%, #dbeafe 40%, #eff6ff 100%); min-height: 100vh; }
 
     /* ── Header ── */
-    .header-card {
-      background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 55%, #3b82f6 100%);
-      border-radius: 24px; padding: 24px 32px;
-      box-shadow: 0 8px 30px rgba(29,78,216,0.4), inset 0 1px 0 rgba(255,255,255,0.15); margin-bottom: 32px;
-    }
+    .header-card { background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 55%, #3b82f6 100%); border-radius: 24px; padding: 24px 32px; box-shadow: 0 8px 30px rgba(29,78,216,0.4), inset 0 1px 0 rgba(255,255,255,0.15); margin-bottom: 32px; }
     .book-icon-anim { animation: book-bounce 3s ease-in-out infinite; display: inline-block; }
     @keyframes book-bounce { 0%,100% { transform: translateY(0) rotate(-5deg) scale(1); } 50% { transform: translateY(-12px) rotate(5deg) scale(1.05); } }
 
-    /* ── ชั้นไม้สักทอง (ออริจินอล) ── */
+    /* ── ชั้นไม้สักทอง ── */
     .room {
       background:
         repeating-linear-gradient(173deg, transparent 0px, transparent 9px, rgba(100,55,10,0.07) 9px, rgba(100,55,10,0.07) 10px, transparent 10px, transparent 19px, rgba(80,40,8,0.04) 19px, rgba(80,40,8,0.04) 20px),
         repeating-linear-gradient(167deg, transparent 0px, transparent 22px, rgba(140,80,20,0.05) 22px, rgba(140,80,20,0.05) 23px),
         linear-gradient(180deg, #D9A055 0%, #C4873A 25%, #B87428 50%, #C4873A 75%, #D9A055 100%);
-      border-radius: 20px; padding: 20px 20px 0;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,220,120,0.35), inset 0 -6px 15px rgba(0,0,0,0.18);
-      position: relative; overflow: hidden;
+      border-radius: 20px; padding: 20px 20px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,220,120,0.35), inset 0 -6px 15px rgba(0,0,0,0.18); position: relative; overflow: hidden;
     }
     .room::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(to right, transparent, rgba(255,235,150,0.4), transparent); border-radius: 20px 20px 0 0; }
 
@@ -44,12 +33,9 @@
     @media (max-width: 500px)  { .book-row { grid-template-columns: repeat(2,1fr); gap:8px; } }
     @media (min-width:501px) and (max-width:820px) { .book-row { grid-template-columns: repeat(3,1fr); } }
 
-    .shelf-plank {
-      height: 20px; background: linear-gradient(180deg,#E8A020 0%,#C8860A 20%,#A06808 50%,#C8860A 80%,#E8A020 100%);
-      border-radius: 4px; box-shadow: 0 8px 20px rgba(0,0,0,0.5), inset 0 2px 0 rgba(255,220,100,0.4), inset 0 -2px 0 rgba(0,0,0,0.3); margin-bottom: 28px;
-    }
+    .shelf-plank { height: 20px; background: linear-gradient(180deg,#E8A020 0%,#C8860A 20%,#A06808 50%,#C8860A 80%,#E8A020 100%); border-radius: 4px; box-shadow: 0 8px 20px rgba(0,0,0,0.5), inset 0 2px 0 rgba(255,220,100,0.4), inset 0 -2px 0 rgba(0,0,0,0.3); margin-bottom: 28px; }
 
-    /* ── 3D Book (ออริจินอลของคุณ) ── */
+    /* ── 3D Book ออริจินอล ── */
     .book-scene { perspective: 800px; display: flex; flex-direction: column; align-items: center; cursor: pointer; }
     .book-3d { width: 100%; max-width: 130px; height: 175px; position: relative; transform-style: preserve-3d; transition: transform 0.4s cubic-bezier(0.23,1,0.32,1); filter: drop-shadow(3px 6px 12px rgba(0,0,0,0.45)); }
     .book-scene:hover .book-3d { transform: rotateY(-28deg) translateX(7px) translateY(-10px); filter: drop-shadow(7px 14px 20px rgba(0,0,0,0.55)); }
@@ -62,7 +48,7 @@
     .book-scene:hover .book-actions { opacity:1; transform:translateY(0); pointer-events:auto; }
     .bk-btn { width:28px; height:28px; border-radius:50%; background:white; border:none; cursor:pointer; font-size:10px; box-shadow:0 2px 8px rgba(0,0,0,0.18); transition:all 0.15s; display:flex; align-items:center; justify-content:center; }
     .bk-btn:hover { transform:scale(1.2); }
-    .bk-edit  { color:#3b82f6; } .bk-del   { color:#ef4444; } .bk-share { color:#00B900; }
+    .bk-edit  { color:#3b82f6; } .bk-del { color:#ef4444; } .bk-share { color:#00B900; }
 
     @media (max-width: 640px) {
       .book-3d { max-width: 150px; height: 195px; } 
@@ -72,12 +58,10 @@
       .book-actions { opacity: 1; transform: none; pointer-events: auto; } 
     }
 
-    .drop-zone { border:2px dashed #60a5fa; border-radius:16px; transition:all 0.2s; cursor:pointer; }
-    .drop-zone:hover, .drop-zone.dragover { border-color:#2563eb; background:#eff6ff; }
     .modal-bg { background:rgba(0,15,30,0.72); backdrop-filter:blur(10px); }
 
     /* ════════════════════════════════════
-       E-BOOK READER  (Perfect Native Zoom & Pan)
+       E-BOOK READER  (Native Width Control)
     ════════════════════════════════════ */
     #readerOverlay { position:fixed; inset:0; background:#111; z-index:300; display:none; flex-direction:column; }
     .rd-topbar { flex-shrink:0; display:flex; align-items:center; justify-content:space-between; padding:10px 16px; background:rgba(0,0,0,0.85); border-bottom:1px solid rgba(255,255,255,0.07); }
@@ -90,33 +74,32 @@
     .rd-nav:hover:not(:disabled) { color:#60a5fa; background:rgba(255,255,255,0.04); }
     .rd-nav:disabled { opacity:0.18; cursor:default; }
 
-    /* โซนที่เลื่อนได้ (Pan Zone) */
+    /* พื้นที่เลื่อน: ให้เบราว์เซอร์จัดการ Scroll เอง ไม่ดึงกลาง */
     #rdScroll {
-      flex: 1; overflow: auto; position: relative;
-      touch-action: pan-x pan-y; -webkit-overflow-scrolling: touch;
-      display: flex; align-items: flex-start; justify-content: flex-start; 
+      flex:1; overflow:auto; min-width:0; min-height:0; width: 100%; height: 100%;
+      -webkit-overflow-scrolling: touch; 
+      text-align: center; /* จัดกลางเมื่อพื้นที่เหลือ */
+      white-space: nowrap;
     }
-
-    #rdZoomWrapper {
-      position: relative; min-width: 100%; min-height: 100%;
-      display: flex; align-items: center; justify-content: center;
-      padding: 10px; 
-    }
+    /* Pseudo-element สำหรับช่วยจัด Center แนวตั้ง */
+    #rdScroll::before { content: ''; display: inline-block; height: 100%; vertical-align: middle; }
 
     #rdBookContainer {
-      position: relative; flex-shrink: 0; box-shadow: 0 12px 50px rgba(0,0,0,0.85);
-      margin: auto; 
-      transition: width 0.1s ease-out, height 0.1s ease-out;
+      display: inline-block; vertical-align: middle;
+      position:relative; box-shadow:0 12px 50px rgba(0,0,0,0.85); background:#f5f0e8;
+      /* ขนาดกว้างยาว จะถูกยืดหดด้วย JS (Native scale) */
     }
 
     .rd-half { position:absolute; top:0; height:100%; overflow:hidden; background:#f5f0e8; }
-    #rdHalfL { border-radius:4px 0 0 4px; }
-    #rdHalfR { border-radius:0 4px 4px 0; }
-    /* 🔥 สำคัญมาก: ลบ object-fit: cover ออกไปเลย ใช้แค่ Width/Height 100% ภาพจะไม่ถูกตัดแหว่ง */
-    .rd-face img, .rd-half img { display:block; width: 100% !important; height: 100% !important; }
-
-    #rdSpine { position:absolute; top:0; z-index:3; background:linear-gradient(to right,rgba(0,0,0,0.22),rgba(0,0,0,0.04),rgba(0,0,0,0.22)); }
+    #rdHalfL { border-radius:4px 0 0 4px; left: 0; width: 100%; } /* Mobile Default */
+    #rdHalfR { border-radius:0 4px 4px 0; right: 0; display: none; }
     
+    /* ภาพข้างในจะขยายเต็ม Width/Height ของ rd-half เสมอ */
+    .rd-face img, .rd-half img { display:block; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+
+    #rdSpine { position:absolute; top:0; z-index:3; background:linear-gradient(to right,rgba(0,0,0,0.22),rgba(0,0,0,0.04),rgba(0,0,0,0.22)); display: none; }
+    
+    /* 3D Flip */
     #rdFlipEl { display:none; position:absolute; top:0; height:100%; z-index:10; transform-style:preserve-3d; transition:transform 0.55s cubic-bezier(0.455,0.03,0.515,0.955); }
     .rd-face { position:absolute; inset:0; overflow:hidden; background:#f5f0e8; backface-visibility:hidden; -webkit-backface-visibility:hidden; }
     #rdFaceB { transform:rotateY(180deg); }
@@ -125,9 +108,8 @@
     .rd-bottombar { flex-shrink:0; display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 16px; background:rgba(0,0,0,0.85); border-top:1px solid rgba(255,255,255,0.07); }
     .zm-btn { height:36px; border-radius:8px; background:rgba(255,255,255,0.1); border:none; color:white; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background 0.15s; }
     .zm-btn.icon-only { width: 36px; }
-    .zm-btn.text-btn { padding: 0 12px; font-weight: bold; }
-    .zm-btn:hover { background:rgba(96,165,250,0.28); color:#60a5fa; }
-    
+    .zm-btn.text-btn { padding: 0 12px; font-weight: bold; font-family: 'Kanit'; font-size: 13px; color: #fff; }
+    .zm-btn:hover { background:rgba(96,165,250,0.3); color:#fff; }
     .rd-sep   { width:1px; height:20px; background:rgba(255,255,255,0.12); margin:0 4px; }
     .rd-pginfo { font-size:12px; color:rgba(255,255,255,0.45); }
 
@@ -139,11 +121,7 @@
     .rdl-status { font-size:13px; color:rgba(96,165,250,0.8); margin-bottom:28px; }
     .rdl-bar-wrap { width:min(320px,80vw); height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden; position:relative; box-shadow:0 0 0 1px rgba(96,165,250,0.15); }
     #rdProgBar { height:100%; width:0%; background:linear-gradient(to right,#2563eb,#60a5fa,#3b82f6); border-radius:4px; transition:width 0.25s ease; position:relative; overflow:hidden; }
-    #rdProgBar::after { content:''; position:absolute; top:0; bottom:0; left:-60%; width:60%; background:linear-gradient(to right,transparent,rgba(255,255,255,0.5),transparent); animation:rdl-shine 1.4s infinite; }
-    @keyframes rdl-shine { to { left:120%; } }
     .rdl-pct { margin-top:10px; font-size:22px; font-weight:700; color:#60a5fa; letter-spacing:1px; }
-    .rdl-sub { margin-top:4px; font-size:11px; color:rgba(255,255,255,0.3); }
-    #rdTitleSpinner { display:none; margin-left:8px; font-size:12px; color:#93c5fd; }
   </style>
 </head>
 <body class="p-4 md:p-8">
@@ -163,10 +141,14 @@
           <p class="text-blue-200 text-xs mt-1">E-Book PDF Collection</p>
         </div>
       </div>
-      <button onclick="openForm()"
-        class="bg-white/20 hover:bg-white/30 active:scale-95 text-white px-7 py-3 rounded-full shadow-lg transition-all font-medium flex items-center gap-2 whitespace-nowrap border border-white/20">
-        <i class="fas fa-plus-circle"></i> เพิ่มหนังสือใหม่
-      </button>
+      <div class="flex gap-2 flex-wrap justify-center">
+        <button onclick="openCalculator()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-full shadow-lg transition-all font-medium flex items-center gap-2 border border-blue-500">
+          <i class="fas fa-calculator"></i> คำนวณยา
+        </button>
+        <button onclick="openForm()" class="bg-white/20 hover:bg-white/30 text-white px-5 py-3 rounded-full shadow-lg transition-all font-medium flex items-center gap-2 border border-white/20">
+          <i class="fas fa-plus-circle"></i> เพิ่มหนังสือ
+        </button>
+      </div>
     </div>
   </div>
 
@@ -190,6 +172,50 @@
 
 </div>
 
+<div id="calcModal" class="fixed inset-0 modal-bg z-50 hidden items-center justify-center p-4">
+  <div class="bg-white rounded-3xl shadow-2xl w-full max-w-sm p-6 relative">
+    <button onclick="document.getElementById('calcModal').classList.add('hidden'); document.getElementById('calcModal').classList.remove('flex');" class="absolute top-4 right-4 text-slate-300 hover:text-rose-500 text-xl transition-colors"><i class="fas fa-times"></i></button>
+    <h3 class="text-xl font-bold text-blue-600 mb-4"><i class="fas fa-syringe mr-2"></i> คำนวณงบประมาณยา</h3>
+    
+    <div class="space-y-4">
+      <div>
+        <label class="block text-sm font-semibold text-slate-500 mb-1">Hct ล่าสุด (%) <span class="font-normal text-xs text-slate-400">(บันทึกช่วยจำ)</span></label>
+        <input type="number" id="calcHct" placeholder="เช่น 30" class="w-full px-4 py-3 bg-slate-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-400">
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-slate-500 mb-1">งบประมาณที่มี (บาท)</label>
+        <input type="number" id="calcBudget" placeholder="เช่น 1000" class="w-full px-4 py-3 bg-slate-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-400 font-bold text-blue-600 text-lg" oninput="runCalculation()">
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-slate-500 mb-1">เลือกตัวยา (ราคา/เข็ม)</label>
+        <select id="calcDrug" class="w-full px-4 py-3 bg-slate-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer" onchange="runCalculation()">
+          <option value="0" disabled selected>-- เลือกยา --</option>
+          <option value="300">EPO Type A (300 บาท)</option>
+          <option value="450">EPO Type B (450 บาท)</option>
+          <option value="1000">Mircera (1,000 บาท)</option>
+          <option value="800">Iron Sucrose (800 บาท)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="mt-6 bg-blue-50 p-4 rounded-2xl border border-blue-100">
+      <div class="flex justify-between items-end mb-2">
+        <span class="text-sm font-semibold text-slate-600">ได้จำนวนทั้งหมด:</span>
+        <span class="text-3xl font-bold text-blue-600" id="resQty">0 <span class="text-base font-normal text-blue-400">เข็ม</span></span>
+      </div>
+      <div class="flex justify-between items-center text-sm border-t border-blue-200/50 pt-2 mt-2">
+        <span class="text-slate-500">รวมเป็นเงิน:</span>
+        <span class="font-bold text-slate-700" id="resTotal">0 บาท</span>
+      </div>
+      <div class="flex justify-between items-center text-sm mt-1">
+        <span class="text-slate-500">สถานะงบ:</span>
+        <span class="font-bold" id="resDiff">-</span>
+      </div>
+      <p class="text-[10px] text-slate-400 mt-3 text-center">*ระบบอนุญาตให้เกินวงเงินได้สูงสุด 100 บาท</p>
+    </div>
+  </div>
+</div>
+
 <div id="formModal" class="fixed inset-0 modal-bg z-50 hidden items-center justify-center p-4">
   <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 relative">
     <button onclick="closeForm()" class="absolute top-5 right-5 text-slate-300 hover:text-slate-500 text-lg transition-colors"><i class="fas fa-times"></i></button>
@@ -205,7 +231,7 @@
       </div>
       <div class="mb-6">
         <label class="block text-sm font-medium text-slate-500 mb-2">ไฟล์ PDF</label>
-        <div class="drop-zone p-5 text-center" id="dropZone" onclick="document.getElementById('bookFile').click()">
+        <div class="border-2 dashed border-blue-300 rounded-2xl p-5 text-center bg-slate-50 hover:bg-blue-50 cursor-pointer transition-colors" onclick="document.getElementById('bookFile').click()">
           <input type="file" id="bookFile" accept="application/pdf" class="hidden">
           <i class="fas fa-file-pdf text-blue-300 text-3xl mb-2 block"></i>
           <p id="fileName" class="text-xs text-slate-400">คลิกหรือลากไฟล์ PDF มาวางที่นี่</p>
@@ -220,39 +246,31 @@
 </div>
 
 <div id="readerOverlay">
-
   <div id="rdLoading">
     <i class="fas fa-book-open rdl-icon"></i>
     <div class="rdl-title" id="rdLoadTitle">กำลังโหลด...</div>
     <div class="rdl-status" id="rdLoadMsg">กำลังดาวน์โหลด PDF</div>
     <div class="rdl-bar-wrap"><div id="rdProgBar"></div></div>
     <div class="rdl-pct" id="rdLoadPct">0%</div>
-    <div class="rdl-sub" id="rdProgTxt"></div>
   </div>
 
   <div class="rd-topbar">
-    <div class="rd-title">
-      <i class="fas fa-book-open"></i>
-      <span id="readerTitle" style="margin-left:8px;">กำลังโหลด...</span>
-      <i class="fas fa-spinner fa-spin" id="rdTitleSpinner"></i>
-    </div>
+    <div class="rd-title"><i class="fas fa-book-open"></i><span id="readerTitle" style="margin-left:8px;"></span><i class="fas fa-spinner fa-spin" id="rdTitleSpinner" style="display:none;"></i></div>
     <button class="rd-close" onclick="closeReader()"><i class="fas fa-times"></i></button>
   </div>
 
   <div class="rd-stage">
     <button class="rd-nav" id="btnPrev" onclick="rdGoPrev()" disabled><i class="fas fa-chevron-left"></i></button>
-
+    
     <div id="rdScroll">
-      <div id="rdZoomWrapper">
-        <div id="rdBookContainer">
-          <div class="rd-half" id="rdHalfL"></div>
-          <div class="rd-half" id="rdHalfR"></div>
-          <div id="rdSpine"></div>
-          <div id="rdFlipEl">
-            <div class="rd-face" id="rdFaceF"></div>
-            <div class="rd-face" id="rdFaceB"></div>
-            <div id="rdFlipShade"></div>
-          </div>
+      <div id="rdBookContainer">
+        <div class="rd-half" id="rdHalfL"></div>
+        <div class="rd-half" id="rdHalfR"></div>
+        <div id="rdSpine"></div>
+        <div id="rdFlipEl">
+          <div class="rd-face" id="rdFaceF"></div>
+          <div class="rd-face" id="rdFaceB"></div>
+          <div id="rdFlipShade"></div>
         </div>
       </div>
     </div>
@@ -273,7 +291,7 @@
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
 // ==========================================
-// ⚙️ API Bridge (เปลี่ยนให้ตรงกับ Web App ล่าสุดของคุณ)
+// ⚙️ API Bridge
 // ==========================================
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbygfy7yad290Ox_Kdat3HqLPZm_2HhsiSwsFPl7SEZm6M3UXz604LT1hK9LvYMkhWuDYw/exec';
 
@@ -329,7 +347,6 @@ function renderBooks() {
 
 function makeBook(book, idx) {
   var pair  = PALETTE[idx % PALETTE.length];
-  var L = pair[0], D = pair[1];
   var title = String(book['Book Title'] || '(ไม่มีชื่อ)');
   var fid   = String(book['File ID']  || '');
   var furl  = String(book['File URL'] || '');
@@ -341,8 +358,8 @@ function makeBook(book, idx) {
   var scene = document.createElement('div'); scene.className = 'book-scene';
   scene.innerHTML =
     '<div class="book-3d" onclick="openReader(\'' + eF + '\',\'' + eT + '\')">' +
-      '<div class="book-spine-face" style="background:' + D + ';"><span>' + title + '</span></div>' +
-      '<div class="book-cover" style="background:linear-gradient(150deg,' + L + ',' + D + ');"><i class="fas fa-book text-white/20 text-2xl mb-2"></i><span>' + title + '</span></div>' +
+      '<div class="book-spine-face" style="background:' + pair[1] + ';"><span>' + title + '</span></div>' +
+      '<div class="book-cover" style="background:linear-gradient(150deg,' + pair[0] + ',' + pair[1] + ');"><i class="fas fa-book text-white/20 text-2xl mb-2"></i><span>' + title + '</span></div>' +
     '</div><div class="book-actions">' +
       '<button class="bk-btn bk-share" onclick="event.stopPropagation();shareBook(\'' + eU + '\',\'' + eT + '\')" title="แชร์ LINE"><i class="fas fa-share-alt"></i></button>' +
       '<button class="bk-btn bk-edit"  onclick="event.stopPropagation();openForm(true,' + ri + ')" title="แก้ไข"><i class="fas fa-pen"></i></button>' +
@@ -352,69 +369,107 @@ function makeBook(book, idx) {
 }
 
 // ════════════════════════════════════════
-// E-BOOK READER CORE 
+// เครื่องคิดเลขยา (Medication Calculator)
+// ════════════════════════════════════════
+function openCalculator() {
+  document.getElementById('calcModal').classList.remove('hidden');
+  document.getElementById('calcModal').classList.add('flex');
+}
+
+function runCalculation() {
+  const budget = parseFloat(document.getElementById('calcBudget').value);
+  const price = parseFloat(document.getElementById('calcDrug').value);
+  
+  if (isNaN(budget) || isNaN(price) || price <= 0) {
+    document.getElementById('resQty').innerHTML = '0 <span class="text-base font-normal text-blue-400">เข็ม</span>';
+    document.getElementById('resTotal').innerText = '0 บาท';
+    document.getElementById('resDiff').innerText = '-';
+    return;
+  }
+
+  // อนุญาตให้เกินงบ 100 บาท (Max = Budget + 100)
+  const maxAllowed = budget + 100;
+  const qty = Math.floor(maxAllowed / price);
+  const total = qty * price;
+  const diff = budget - total;
+
+  document.getElementById('resQty').innerHTML = `${qty} <span class="text-base font-normal text-blue-400">เข็ม</span>`;
+  document.getElementById('resTotal').innerText = `${total.toLocaleString()} บาท`;
+
+  if (diff < 0) {
+    document.getElementById('resDiff').innerHTML = `<span class="text-rose-500">จ่ายเพิ่ม ${Math.abs(diff).toLocaleString()} บาท</span>`;
+  } else {
+    document.getElementById('resDiff').innerHTML = `<span class="text-mint-600">เงินทอน ${diff.toLocaleString()} บาท</span>`;
+  }
+}
+
+// ════════════════════════════════════════
+// E-BOOK READER CORE (PERFECT WIDTH & PANNING)
 // ════════════════════════════════════════
 var rdURLs    = [];
 var rdLeft    = -1;
 var rdRight   = 0;
 var rdFlipping = false;
-var baseW     = 0;
-var baseH     = 0;
-var baseScale = 1.0;
+var basePageW = 0;
+var basePageH = 0;
 var rdZoom    = 1.0;
 var rdMobile  = false;
 
 function openReader(fileId, title) {
   if (!fileId) { Swal.fire({icon:'info',title:'ไม่มีไฟล์ PDF'}); return; }
-  rdURLs=[]; rdLeft=-1; rdRight=0; rdFlipping=false; rdZoom=1.0; baseW=0; baseH=0;
+  rdURLs=[]; rdLeft=-1; rdRight=0; rdFlipping=false; rdZoom=1.0; basePageW=0; basePageH=0;
   document.getElementById('zoomLabel').textContent = '100%';
   document.getElementById('pageInfo').textContent  = '— / —';
   document.getElementById('btnPrev').disabled = true; document.getElementById('btnNext').disabled = true;
   document.getElementById('rdHalfL').innerHTML = ''; document.getElementById('rdHalfR').innerHTML = '';
-  document.getElementById('rdHalfR').style.display = ''; document.getElementById('rdSpine').style.display  = '';
+  document.getElementById('rdHalfR').style.display = 'none'; document.getElementById('rdSpine').style.display  = 'none';
   document.getElementById('rdBookContainer').style.width = '0px'; 
   document.getElementById('rdFlipEl').style.display = 'none';
   document.getElementById('readerTitle').textContent = title; document.getElementById('rdLoadTitle').textContent = title;
   document.getElementById('rdTitleSpinner').style.display = 'inline'; document.getElementById('readerOverlay').style.display  = 'flex';
-  rdShowLoad('กำลังดาวน์โหลด PDF...', 0, '');
+  document.getElementById('rdLoading').style.display = 'flex';
 
-  callBackend('getPdfData', { fileId: fileId }).then(function(res) { if (!res || !res.success) { rdErrMsg('โหลดไม่สำเร็จ: ' + (res&&res.error||'unknown')); return; } buildReader(res.data); }).catch(function(err) { rdErrMsg('ข้อผิดพลาด: ' + err.message); });
+  callBackend('getPdfData', { fileId: fileId }).then(function(res) { if (!res || !res.success) { rdErrMsg('โหลดไม่สำเร็จ'); return; } buildReader(res.data); }).catch(function(err) { rdErrMsg('ข้อผิดพลาด: ' + err.message); });
 }
 
 async function buildReader(b64) {
   try {
-    rdShowLoad('กำลังประมวลผลหน้ากระดาษ...', 0, '');
     var bin = atob(b64), bytes = new Uint8Array(bin.length);
     for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
 
     var pdf    = await pdfjsLib.getDocument({ data: bytes }).promise;
     var nPages = pdf.numPages;
-    rdMobile   = window.innerWidth < 768; // ต่ำกว่า 768px ถือเป็นมือถือ/แท็บเล็ตแนวตั้ง
+    rdMobile   = window.innerWidth < 768; // ต่ำกว่า 768px เป็นมือถือ
 
     var vw = window.innerWidth, vh = window.innerHeight;
 
     var pg0   = await pdf.getPage(1);
     var vp0   = pg0.getViewport({ scale: 1 });
-    baseW = vp0.width; baseH = vp0.height;
     
-    // 💡 การหาสัดส่วนให้ "พอดีเป๊ะ 100%" (Responsive Fit)
-    // สำหรับมือถือ ลบขอบ 20px (ข้างละ 10px), PC ลบขอบรวม 80px แล้วแบ่งครึ่ง
-    var maxW = rdMobile ? (vw - 20) : (vw - 80) / 2; 
-    var maxH = vh - 130; // ลบแถบเมนูบนล่าง
+    // 💡 คำนวณความกว้างให้ "พอดีขอบ" 100% (No Cropping)
+    var maxW = rdMobile ? (vw - 20) : (vw - 80) / 2; // มือถือเว้นข้างละ 10px / คอมเว้นตรงกลางและขอบ
+    var maxH = vh - 130; 
 
-    baseScale = Math.min(maxW / baseW, maxH / baseH);
+    // หาระยะที่พอดีหน้าจอที่สุด
+    var fitScale = Math.min(maxW / vp0.width, maxH / vp0.height);
     
-    // เรนเดอร์ด้วยความละเอียด 2.5 เท่าเผื่อการซูม (ไม่เบลอ)
+    // เก็บขนาด 1 หน้ากระดาษเมื่อแสดงผล 100%
+    basePageW = vp0.width  * fitScale;
+    basePageH = vp0.height * fitScale;
+
+    // เรนเดอร์ Canvas ที่ความละเอียด 2 เท่า เพื่อความคมชัดเวลาซูม
     var dpr = Math.max(window.devicePixelRatio || 1, 2.0); 
-    var renderScale = baseScale * dpr * 2.5; 
+    var renderScale = fitScale * dpr * 2.0;
 
     rdURLs = [];
     for (var p = 1; p <= nPages; p++) {
       var pct = Math.round(p / nPages * 100);
-      rdShowLoad('กำลังโหลดหน้า...', pct, p + ' / ' + nPages + ' หน้า');
+      document.getElementById('rdProgBar').style.width = pct + '%';
+      document.getElementById('rdLoadPct').textContent = pct + '%';
+      
       var page = await pdf.getPage(p);
       var vp = page.getViewport({ scale: renderScale });
-      var c = document.createElement('canvas'); c.width = Math.ceil(vp.width); c.height = Math.ceil(vp.height);
+      var c = document.createElement('canvas'); c.width = vp.width; c.height = vp.height;
       await page.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise;
       rdURLs.push(c.toDataURL()); c = null;
     }
@@ -423,18 +478,18 @@ async function buildReader(b64) {
     document.getElementById('rdTitleSpinner').style.display = 'none';
     rdLeft  = rdMobile ? 0 : -1; rdRight = rdMobile ? -1 : 0;
     
-    rdSetZoom(1.0); // เริ่มที่ 100%
+    rdSetZoom(1.0); // บังคับวาดครั้งแรก
 
   } catch(err) { rdErrMsg('เกิดข้อผิดพลาด: ' + err.message); }
 }
 
 function applyResize() {
-  var w = baseW * baseScale * rdZoom;
-  var h = baseH * baseScale * rdZoom;
+  var w = basePageW * rdZoom;
+  var h = basePageH * rdZoom;
   var bookContainer = document.getElementById('rdBookContainer');
   var hl = document.getElementById('rdHalfL'); var hr = document.getElementById('rdHalfR'); var sp = document.getElementById('rdSpine');
 
-  // ควบคุมขนาดกระดาษแบบเปอร์เซ็นต์ หน้ากระดาษจะไม่แยกจากกันใน PC แนนอน
+  // ควบคุมขนาด Width จริง (ไม่มี Transform) เพื่อให้เบราว์เซอร์เลื่อนจอได้อิสระ
   if (rdMobile) {
     bookContainer.style.width = w + 'px'; bookContainer.style.height = h + 'px';
     hl.style.width = '100%'; hl.style.left = '0';
@@ -471,12 +526,12 @@ function rdUpdateInfo() {
 // ════════════════════════════════════════
 // 🔍 ZOOM LOGIC (อิสระและย่อได้ ไม่ยื้อศูนย์กลาง)
 // ════════════════════════════════════════
-const MIN_ZOOM = 0.4; // ลดได้ถึง 40%
+const MIN_ZOOM = 0.4; // ลดได้ 40%
 const MAX_ZOOM = 5.0; // ขยายได้ 500%
 
 function rdZoomIn()    { rdSetZoom(rdZoom + 0.25); }
 function rdZoomOut()   { rdSetZoom(rdZoom - 0.25); }
-function rdZoomReset() { rdSetZoom(1.0); } // รีเซ็ต 100%
+function rdZoomReset() { rdSetZoom(1.0); }
 
 function rdSetZoom(newZoom, cx = null, cy = null) {
   const scroll = document.getElementById('rdScroll');
@@ -493,14 +548,14 @@ function rdSetZoom(newZoom, cx = null, cy = null) {
 
   applyResize();
 
-  // ขยับ Scroll เพื่อรักษาจุดโฟกัส 
+  // ขยับ Scroll เพื่อรักษาจุดโฟกัส (ไม่ให้เด้งกลางจอ)
   const zoomRatio = rdZoom / oldZoom;
   scroll.scrollLeft = (beforeX * zoomRatio) - cx;
   scroll.scrollTop  = (beforeY * zoomRatio) - cy;
 }
 
 // ════════════════════════════════════════
-// 📖 3D PAGE FLIP (เปอร์เซ็นต์ป้องกันขอบแตก)
+// 📖 3D PAGE FLIP 
 // ════════════════════════════════════════
 var rdD = { on:false, dir:'', sx:0, angle:0, fIdx:-1, bIdx:-1, nL:-1, nR:-1 };
 
@@ -525,8 +580,8 @@ function rdSetupFlip(dir) {
 
   fe.style.transform = 'rotateY(0deg)'; fe.style.transition = 'none';
   ff.innerHTML=''; fb.innerHTML='';
-  if(rdD.fIdx >=0 && rdD.fIdx<rdURLs.length) { var iF=new Image(); iF.src=rdURLs[rdD.fIdx]; iF.style.cssText='display:block;width:100%;height:100%; object-fit:cover;'; ff.appendChild(iF); }
-  if(rdD.bIdx >=0 && rdD.bIdx<rdURLs.length) { var iB=new Image(); iB.src=rdURLs[rdD.bIdx]; iB.style.cssText='display:block;width:100%;height:100%; object-fit:cover;'; fb.appendChild(iB); }
+  if(rdD.fIdx >=0 && rdD.fIdx<rdURLs.length) { var iF=new Image(); iF.src=rdURLs[rdD.fIdx]; ff.appendChild(iF); }
+  if(rdD.bIdx >=0 && rdD.bIdx<rdURLs.length) { var iB=new Image(); iB.src=rdURLs[rdD.bIdx]; fb.appendChild(iB); }
   shd.style.opacity='0'; shd.style.transition=''; 
 }
 
@@ -569,9 +624,7 @@ function rdGoPrev() { if (rdFlipping || rdD.on) return; var canPrev = rdMobile ?
 
   function startDrag(clientX) {
     if (rdFlipping || rdURLs.length === 0 || rdD.on) return false;
-    
-    // 💡 ถ้าไม่ได้ซูม 100% ห้ามพลิก เพื่อให้นิ้วเลื่อนจอดูได้อิสระ
-    if (rdZoom !== 1.0) return false; 
+    if (rdZoom !== 1.0) return false; // 💡 ถ้าย่อขยายอยู่ ปิดการพลิก เพื่อให้ใช้นิ้วเลื่อนดู (Pan)
 
     var rect = book.getBoundingClientRect();
     var x = clientX - rect.left;
@@ -588,7 +641,7 @@ function rdGoPrev() { if (rdFlipping || rdD.on) return; var canPrev = rdMobile ?
   function moveDrag(clientX) {
     if (!rdD.on) return;
     var dx = clientX - rdD.sx;
-    var pageW = rdMobile ? (baseW * baseScale * rdZoom) : (baseW * baseScale * rdZoom * 2);
+    var pageW = rdMobile ? (basePageW * rdZoom) : (basePageW * rdZoom * 2);
     var pct = Math.abs(dx) / Math.max(pageW, 1);
     var ang = 0;
     if (rdD.dir === 'next' && dx < 0) ang = Math.max(-180, pct * -180);
@@ -600,7 +653,7 @@ function rdGoPrev() { if (rdFlipping || rdD.on) return; var canPrev = rdMobile ?
 
   function endDrag() { if (!rdD.on) return; rdD.on = false; book.style.cursor = 'grab'; if (Math.abs(rdD.angle) > 60) rdCommit(rdD.dir); else rdCancel(); }
 
-  // 2 นิ้วถ่างซูม (Pinch to zoom)
+  // 2 นิ้วถ่างซูม (Pinch to zoom) โฟกัสถูกจุด
   scroll.addEventListener('touchstart', function(e) {
     if (e.touches.length === 2) {
       rdD.on = false; 
@@ -618,16 +671,17 @@ function rdGoPrev() { if (rdFlipping || rdD.on) return; var canPrev = rdMobile ?
       e.preventDefault(); 
       var t1 = e.touches[0], t2 = e.touches[1];
       var dist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
-      rdSetZoom(pinchInitZoom * (dist / pinchInitDist), pinchCentroid.x, pinchCentroid.y);
+      var newZoom = pinchInitZoom * (dist / pinchInitDist);
+      rdSetZoom(newZoom, pinchCentroid.x, pinchCentroid.y);
     }
   }, { passive: false });
 
   scroll.addEventListener('touchend', function(e) { if (e.touches.length < 2) pinchInitDist = 0; }, { passive: true });
 
-  // จับพลิกหน้า (1 นิ้ว)
+  // 1 นิ้วพลิกหน้า
   book.addEventListener('touchstart', function(e) { if (e.touches.length === 1 && !pinchInitDist) { startDrag(e.touches[0].clientX); } }, { passive: true });
   book.addEventListener('touchmove', function(e) {
-    if (!rdD.on) return; 
+    if (!rdD.on) return; // ถ้าไม่ได้เปิดพลิก ให้เบราว์เซอร์เลื่อนหน้าจอ
     var dx = e.touches[0].clientX - rdD.sx;
     if (Math.abs(dx) > 8 && e.cancelable) { e.preventDefault(); }
     moveDrag(e.touches[0].clientX);
@@ -656,7 +710,6 @@ function rdShowLoad(msg, pct, sub) {
   var m = document.getElementById('rdLoadMsg');  if (m) m.textContent = msg;
   var b = document.getElementById('rdProgBar');  if (b) b.style.width  = pct + '%';
   var p = document.getElementById('rdLoadPct');  if (p) p.textContent  = pct + '%';
-  var t = document.getElementById('rdProgTxt');  if (t) t.textContent  = sub || '';
 }
 function rdErrMsg(msg) {
   document.getElementById('rdTitleSpinner').style.display = 'none';
@@ -669,16 +722,16 @@ function rdErrMsg(msg) {
 // CRUD & SHARE
 // ════════════════════════════════════════
 function shareBook(url, title) {
-  if (!url) { Swal.fire({ icon:'info', title:'ไม่มีลิงค์ไฟล์', confirmButtonColor:'#059669' }); return; }
+  if (!url) { Swal.fire({ icon:'info', title:'ไม่มีลิงค์ไฟล์', confirmButtonColor:'#00B900' }); return; }
   var lineUrl = 'https://line.me/R/msg/text/?' + encodeURIComponent('📚 ' + title + '\n\n' + url);
   Swal.fire({
     title: '<span style="font-family:Kanit;color:#00B900"><i class="fab fa-line mr-2"></i>แชร์หนังสือ</span>',
     html: '<p style="font-family:Kanit;font-size:13px;color:#555;margin-bottom:10px;">' + title + '</p><div style="background:#f5f5f5;border-radius:10px;padding:10px 12px;font-size:11px;word-break:break-all;color:#444;text-align:left;">' + url + '</div>',
-    showDenyButton: true, showCancelButton: false, confirmButtonText: '<i class="fab fa-line mr-1"></i> เปิด LINE แชร์', denyButtonText: '<i class="fas fa-copy mr-1"></i> คัดลอกลิงค์', confirmButtonColor: '#00B900', denyButtonColor: '#6b7280'
+    showDenyButton: true, showCancelButton: false, confirmButtonText: '<i class="fab fa-line mr-1"></i> เปิด LINE', denyButtonText: '<i class="fas fa-copy mr-1"></i> คัดลอกลิงค์', confirmButtonColor: '#00B900', denyButtonColor: '#6b7280'
   }).then(function(r) {
     if (r.isConfirmed) { window.open(lineUrl, '_blank'); }
     else if (r.isDenied) {
-      if (navigator.clipboard) { navigator.clipboard.writeText(url).then(function() { Swal.fire({ icon:'success', title:'คัดลอกแล้ว!', timer:1200, showConfirmButton:false }); }).catch(function() { fallbackCopy(url); }); } else { fallbackCopy(url); }
+      if (navigator.clipboard) { navigator.clipboard.writeText(url).then(function() { Swal.fire({ icon:'success', title:'คัดลอกแล้ว!', timer:1200, showConfirmButton:false }); }); } else { fallbackCopy(url); }
     }
   });
 }
@@ -688,25 +741,24 @@ function handleSave(e) {
   e.preventDefault(); var file = document.getElementById('bookFile').files[0];
   var info = { rowIndex: parseInt(document.getElementById('rowIndex').value)||null, bookTitle: document.getElementById('bookTitle').value.trim(), existingUrl: document.getElementById('existingUrl').value||'', existingId: document.getElementById('existingId').value||'' };
   if (!file && !info.existingUrl) { Swal.fire({ icon:'warning', title:'กรุณาเลือกไฟล์ PDF' }); return; }
-  Swal.fire({ title: 'กำลังนำหนังสือขึ้นชั้น...', html: '<span style="font-family:Kanit;font-size:13px;color:#999">อาจใช้เวลา 10–30 วินาที</span>', allowOutsideClick: false, didOpen: function() { Swal.showLoading(); } });
+  Swal.fire({ title: 'กำลังนำหนังสือขึ้นชั้น...', allowOutsideClick: false, didOpen: function() { Swal.showLoading(); } });
   if (file) { var rd = new FileReader(); rd.onload = function(ev) { info.fileBase64 = ev.target.result; submitData(info); }; rd.readAsDataURL(file); } else { submitData(info); }
 }
 
 function submitData(info) {
   callBackend('saveBook', info).then(function(res) {
-    if (res && res.success) { Swal.fire({ icon:'success', title:'บันทึกสำเร็จ!', timer:1500, showConfirmButton:false }); closeForm(); loadBooks(); } else { Swal.fire({ icon:'error', title:'บันทึกไม่สำเร็จ', text:(res&&res.message)||'ลองใหม่' }); }
+    if (res && res.success) { Swal.fire({ icon:'success', title:'บันทึกสำเร็จ!', timer:1500, showConfirmButton:false }); closeForm(); loadBooks(); } else { Swal.fire({ icon:'error', title:'บันทึกไม่สำเร็จ', text:res.message }); }
   }).catch(function(err) { Swal.fire({ icon:'error', title:'ข้อผิดพลาด', text:err.message }); });
 }
 
 function confirmDelete(rowIndex, fileId) {
   Swal.fire({
-    title: '<span style="font-family:Kanit">ยืนยันการลบ</span>',
-    icon: 'warning', showCancelButton: true, confirmButtonColor: '#ef4444', cancelButtonColor: '#6b7280', confirmButtonText: '<i class="fas fa-trash mr-1"></i> ลบเลย', cancelButtonText: 'ยกเลิก', focusConfirm: false,
+    title: '<span style="font-family:Kanit">ยืนยันการลบ</span>', icon: 'warning', showCancelButton: true, confirmButtonColor: '#ef4444', confirmButtonText: '<i class="fas fa-trash mr-1"></i> ลบเลย', cancelButtonText: 'ยกเลิก',
   }).then(function(r) {
     if (!r.isConfirmed) return;
     Swal.fire({ title:'กำลังลบ...', allowOutsideClick:false, didOpen:function(){ Swal.showLoading(); } });
     callBackend('deleteBook', { rowIndex: rowIndex, fileId: fileId }).then(function(res) {
-      if (res && res.success) { Swal.fire({ icon:'success', title:'ลบเรียบร้อย!', timer:1200, showConfirmButton:false }); loadBooks(); } else Swal.fire({ icon:'error', title:'ลบไม่สำเร็จ', text:res&&res.message });
+      if (res && res.success) { Swal.fire({ icon:'success', title:'ลบเรียบร้อย!', timer:1200, showConfirmButton:false }); loadBooks(); } else Swal.fire({ icon:'error', title:'ลบไม่สำเร็จ', text:res.message });
     }).catch(function(err) { Swal.fire({ icon:'error', title:'ข้อผิดพลาด', text:err.message }); });
   });
 }
