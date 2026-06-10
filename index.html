@@ -49,7 +49,7 @@
       border-radius: 4px; box-shadow: 0 8px 20px rgba(0,0,0,0.5), inset 0 2px 0 rgba(255,220,100,0.4), inset 0 -2px 0 rgba(0,0,0,0.3); margin-bottom: 28px;
     }
 
-    /* ── 3D Book (ออริจินอล) ── */
+    /* ── 3D Book (ออริจินอลของคุณ) ── */
     .book-scene { perspective: 800px; display: flex; flex-direction: column; align-items: center; cursor: pointer; }
     .book-3d { width: 100%; max-width: 130px; height: 175px; position: relative; transform-style: preserve-3d; transition: transform 0.4s cubic-bezier(0.23,1,0.32,1); filter: drop-shadow(3px 6px 12px rgba(0,0,0,0.45)); }
     .book-scene:hover .book-3d { transform: rotateY(-28deg) translateX(7px) translateY(-10px); filter: drop-shadow(7px 14px 20px rgba(0,0,0,0.55)); }
@@ -58,7 +58,6 @@
     .book-cover::after { content: ''; position: absolute; top:4px; right:-7px; width:8px; height:calc(100% - 8px); background: repeating-linear-gradient(180deg,#f0e6d0 0,#f0e6d0 1px,#ddd0b0 1px,#ddd0b0 2px); border-radius:0 3px 3px 0; box-shadow:2px 0 5px rgba(0,0,0,0.18); pointer-events:none; }
     .book-spine-face { position: absolute; top:0; left:0; width:14px; height:175px; transform-origin: left center; transform: rotateY(90deg) translateX(7px); border-radius: 2px 0 0 2px; display: flex; align-items: center; justify-content: center; padding: 4px 2px; overflow: hidden; }
     .book-spine-face span { writing-mode: vertical-rl; transform: rotate(180deg); color: rgba(255,255,255,0.7); font-size: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-height: 140px; }
-    
     .book-actions { display: flex; gap: 7px; margin-top: 9px; opacity: 0; transform: translateY(4px); transition: all 0.2s; pointer-events: none; }
     .book-scene:hover .book-actions { opacity:1; transform:translateY(0); pointer-events:auto; }
     .bk-btn { width:28px; height:28px; border-radius:50%; background:white; border:none; cursor:pointer; font-size:10px; box-shadow:0 2px 8px rgba(0,0,0,0.18); transition:all 0.15s; display:flex; align-items:center; justify-content:center; }
@@ -78,10 +77,10 @@
     .modal-bg { background:rgba(0,15,30,0.72); backdrop-filter:blur(10px); }
 
     /* ════════════════════════════════════
-       E-BOOK READER  (PERFECT ZOOM & PAN)
+       E-BOOK READER  (Perfect Native Zoom & Pan)
     ════════════════════════════════════ */
     #readerOverlay { position:fixed; inset:0; background:#111; z-index:300; display:none; flex-direction:column; }
-    .rd-topbar { flex-shrink:0; display:flex; align-items:center; justify-content:space-between; padding:10px 16px; background:rgba(0,0,0,0.75); border-bottom:1px solid rgba(255,255,255,0.07); }
+    .rd-topbar { flex-shrink:0; display:flex; align-items:center; justify-content:space-between; padding:10px 16px; background:rgba(0,0,0,0.85); border-bottom:1px solid rgba(255,255,255,0.07); }
     .rd-title { color:#93c5fd; font-size:17px; font-weight:600; display:flex; align-items:center; gap:8px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:calc(100vw - 120px); }
     .rd-close { flex-shrink:0; width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.1); border:none; color:white; cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center; transition:background 0.2s; }
     .rd-close:hover { background:rgba(96,165,250,0.3); }
@@ -91,23 +90,30 @@
     .rd-nav:hover:not(:disabled) { color:#60a5fa; background:rgba(255,255,255,0.04); }
     .rd-nav:disabled { opacity:0.18; cursor:default; }
 
-    /* พื้นที่สำหรับให้กระดาษเลื่อนได้อย่างอิสระ */
+    /* โซนที่เลื่อนได้ (Pan Zone) */
     #rdScroll {
-      flex:1; overflow:auto; min-width:0; min-height:0;
-      display:flex; align-items:flex-start; justify-content:flex-start; padding:20px; 
-      -webkit-overflow-scrolling: touch; 
+      flex: 1; overflow: auto; position: relative;
+      touch-action: pan-x pan-y; -webkit-overflow-scrolling: touch;
+      display: flex; align-items: flex-start; justify-content: flex-start; 
     }
 
-    #rdBook {
-      position:relative; flex-shrink:0; box-shadow:0 12px 50px rgba(0,0,0,0.85);
-      margin: auto; /* จัดกึ่งกลางให้อัตโนมัติเมื่อขนาดเล็กกว่าจอ */
+    #rdZoomWrapper {
+      position: relative; min-width: 100%; min-height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      padding: 10px; 
+    }
+
+    #rdBookContainer {
+      position: relative; flex-shrink: 0; box-shadow: 0 12px 50px rgba(0,0,0,0.85);
+      margin: auto; 
       transition: width 0.1s ease-out, height 0.1s ease-out;
     }
 
     .rd-half { position:absolute; top:0; height:100%; overflow:hidden; background:#f5f0e8; }
     #rdHalfL { border-radius:4px 0 0 4px; }
     #rdHalfR { border-radius:0 4px 4px 0; }
-    .rd-face img, .rd-half img { display:block; width: 100% !important; height: 100% !important; object-fit: cover; }
+    /* 🔥 สำคัญมาก: ลบ object-fit: cover ออกไปเลย ใช้แค่ Width/Height 100% ภาพจะไม่ถูกตัดแหว่ง */
+    .rd-face img, .rd-half img { display:block; width: 100% !important; height: 100% !important; }
 
     #rdSpine { position:absolute; top:0; z-index:3; background:linear-gradient(to right,rgba(0,0,0,0.22),rgba(0,0,0,0.04),rgba(0,0,0,0.22)); }
     
@@ -116,17 +122,17 @@
     #rdFaceB { transform:rotateY(180deg); }
     #rdFlipShade { position:absolute; inset:0; pointer-events:none; z-index:2; opacity:0; transition:opacity 0.25s; }
 
-    .rd-bottombar { flex-shrink:0; display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 16px; background:rgba(0,0,0,0.75); border-top:1px solid rgba(255,255,255,0.07); }
-    .zm-btn { width:32px; height:32px; border-radius:8px; background:rgba(255,255,255,0.1); border:none; color:white; font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background 0.15s; }
+    .rd-bottombar { flex-shrink:0; display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 16px; background:rgba(0,0,0,0.85); border-top:1px solid rgba(255,255,255,0.07); }
+    .zm-btn { height:36px; border-radius:8px; background:rgba(255,255,255,0.1); border:none; color:white; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background 0.15s; }
+    .zm-btn.icon-only { width: 36px; }
+    .zm-btn.text-btn { padding: 0 12px; font-weight: bold; }
     .zm-btn:hover { background:rgba(96,165,250,0.28); color:#60a5fa; }
     
-    #zoomLabel { min-width:60px; text-align:center; font-size:12px; color:rgba(255,255,255,0.7); background:rgba(255,255,255,0.08); border-radius:6px; padding:4px 8px; user-select:none; }
-
-    .rd-sep   { width:1px; height:20px; background:rgba(255,255,255,0.12); margin:0 2px; }
+    .rd-sep   { width:1px; height:20px; background:rgba(255,255,255,0.12); margin:0 4px; }
     .rd-pginfo { font-size:12px; color:rgba(255,255,255,0.45); }
 
     /* Loading overlay */
-    #rdLoading { position:fixed; inset:0; z-index:400; background:linear-gradient(160deg,#060e1a 0%,#0b1f35 50%,#060e1a 100%); display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:'Kanit',sans-serif; color:white; text-align:center; padding:32px; }
+    #rdLoading { position:fixed; inset:0; z-index:400; background:linear-gradient(160deg,#0a192f 0%,#172a45 50%,#0a192f 100%); display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:'Kanit',sans-serif; color:white; text-align:center; padding:32px; }
     .rdl-icon { font-size:56px; color:#60a5fa; margin-bottom:20px; animation:rdl-pulse 1.8s ease-in-out infinite; }
     @keyframes rdl-pulse { 0%,100%{ transform:scale(1) rotate(-3deg); } 50% { transform:scale(1.12) rotate(3deg); } }
     .rdl-title { font-size:16px; font-weight:600; color:white; max-width:320px; margin-bottom:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -214,6 +220,7 @@
 </div>
 
 <div id="readerOverlay">
+
   <div id="rdLoading">
     <i class="fas fa-book-open rdl-icon"></i>
     <div class="rdl-title" id="rdLoadTitle">กำลังโหลด...</div>
@@ -225,23 +232,27 @@
 
   <div class="rd-topbar">
     <div class="rd-title">
-      <i class="fas fa-book-open"></i><span id="readerTitle" style="margin-left:8px;">กำลังโหลด...</span><i class="fas fa-spinner fa-spin" id="rdTitleSpinner"></i>
+      <i class="fas fa-book-open"></i>
+      <span id="readerTitle" style="margin-left:8px;">กำลังโหลด...</span>
+      <i class="fas fa-spinner fa-spin" id="rdTitleSpinner"></i>
     </div>
     <button class="rd-close" onclick="closeReader()"><i class="fas fa-times"></i></button>
   </div>
 
   <div class="rd-stage">
     <button class="rd-nav" id="btnPrev" onclick="rdGoPrev()" disabled><i class="fas fa-chevron-left"></i></button>
-    
+
     <div id="rdScroll">
-      <div id="rdBook">
-        <div class="rd-half" id="rdHalfL"></div>
-        <div class="rd-half" id="rdHalfR"></div>
-        <div id="rdSpine"></div>
-        <div id="rdFlipEl">
-          <div class="rd-face" id="rdFaceF"></div>
-          <div class="rd-face" id="rdFaceB"></div>
-          <div id="rdFlipShade"></div>
+      <div id="rdZoomWrapper">
+        <div id="rdBookContainer">
+          <div class="rd-half" id="rdHalfL"></div>
+          <div class="rd-half" id="rdHalfR"></div>
+          <div id="rdSpine"></div>
+          <div id="rdFlipEl">
+            <div class="rd-face" id="rdFaceF"></div>
+            <div class="rd-face" id="rdFaceB"></div>
+            <div id="rdFlipShade"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -250,10 +261,9 @@
   </div>
 
   <div class="rd-bottombar">
-    <button class="zm-btn" onclick="rdZoomOut()" title="ย่อขนาด"><i class="fas fa-search-minus"></i></button>
-    <button class="zm-btn" onclick="rdZoomReset()" title="รีเซ็ตหน้าจอพอดี"><i class="fas fa-undo"></i></button>
-    <span id="zoomLabel">100%</span>
-    <button class="zm-btn" onclick="rdZoomIn()" title="ขยายขนาด"><i class="fas fa-search-plus"></i></button>
+    <button class="zm-btn icon-only" onclick="rdZoomOut()" title="ย่อขนาด"><i class="fas fa-search-minus"></i></button>
+    <button class="zm-btn text-btn" onclick="rdZoomReset()" title="รีเซ็ตพอดีจอ"><i class="fas fa-undo mr-1"></i> <span id="zoomLabel">100%</span></button>
+    <button class="zm-btn icon-only" onclick="rdZoomIn()" title="ขยายขนาด"><i class="fas fa-search-plus"></i></button>
     <div class="rd-sep"></div>
     <span class="rd-pginfo" id="pageInfo">— / —</span>
   </div>
@@ -263,12 +273,11 @@
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
 // ==========================================
-// ⚙️ API Bridge
+// ⚙️ API Bridge (เปลี่ยนให้ตรงกับ Web App ล่าสุดของคุณ)
 // ==========================================
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbygfy7yad290Ox_Kdat3HqLPZm_2HhsiSwsFPl7SEZm6M3UXz604LT1hK9LvYMkhWuDYw/exec';
 
 var BOOKS_PER_SHELF = 4;
-// พาเลทหนังสือออริจินอล
 var PALETTE = [
   ['#047857','#022c22'],['#0369a1','#0c2d48'],['#6d28d9','#2e1065'],
   ['#be185d','#500724'],['#b45309','#451a03'],['#b91c1c','#450a0a'],
@@ -297,14 +306,13 @@ window.onload = loadBooks;
 
 function loadBooks() {
   setState('Loading');
-  callBackend('getBooks')
-    .then(function(res) {
-      if (!res || res.error) { setState('Error', (res && res.error) || 'ไม่ได้รับข้อมูล'); return; }
-      bookData = [];
-      for (var i = 0; i < (res.length || 0); i++) { if (res[i] && res[i]['Book Title']) bookData.push(res[i]); }
-      if (!bookData.length) { setState('Empty'); return; }
-      renderBooks(); setState('Shelf');
-    }).catch(function(err) { setState('Error', 'เชื่อมต่อไม่ได้: ' + err.message); });
+  callBackend('getBooks').then(function(res) {
+    if (!res || res.error) { setState('Error', (res && res.error) || 'ไม่ได้รับข้อมูล'); return; }
+    bookData = [];
+    for (var i = 0; i < (res.length || 0); i++) { if (res[i] && res[i]['Book Title']) bookData.push(res[i]); }
+    if (!bookData.length) { setState('Empty'); return; }
+    renderBooks(); setState('Shelf');
+  }).catch(function(err) { setState('Error', 'เชื่อมต่อไม่ได้: ' + err.message); });
 }
 
 function renderBooks() {
@@ -344,33 +352,33 @@ function makeBook(book, idx) {
 }
 
 // ════════════════════════════════════════
-// E-BOOK READER CORE (PERFECT FIT)
+// E-BOOK READER CORE 
 // ════════════════════════════════════════
 var rdURLs    = [];
 var rdLeft    = -1;
 var rdRight   = 0;
 var rdFlipping = false;
-var rdPageW   = 0;
-var rdPageH   = 0;
+var baseW     = 0;
+var baseH     = 0;
+var baseScale = 1.0;
 var rdZoom    = 1.0;
 var rdMobile  = false;
 
 function openReader(fileId, title) {
   if (!fileId) { Swal.fire({icon:'info',title:'ไม่มีไฟล์ PDF'}); return; }
-  rdURLs=[]; rdLeft=-1; rdRight=0; rdFlipping=false; rdZoom=1.0; rdPageW=0; rdPageH=0;
+  rdURLs=[]; rdLeft=-1; rdRight=0; rdFlipping=false; rdZoom=1.0; baseW=0; baseH=0;
   document.getElementById('zoomLabel').textContent = '100%';
   document.getElementById('pageInfo').textContent  = '— / —';
   document.getElementById('btnPrev').disabled = true; document.getElementById('btnNext').disabled = true;
   document.getElementById('rdHalfL').innerHTML = ''; document.getElementById('rdHalfR').innerHTML = '';
   document.getElementById('rdHalfR').style.display = ''; document.getElementById('rdSpine').style.display  = '';
-  document.getElementById('rdBook').style.cssText   = ''; document.getElementById('rdFlipEl').style.display = 'none';
+  document.getElementById('rdBookContainer').style.width = '0px'; 
+  document.getElementById('rdFlipEl').style.display = 'none';
   document.getElementById('readerTitle').textContent = title; document.getElementById('rdLoadTitle').textContent = title;
   document.getElementById('rdTitleSpinner').style.display = 'inline'; document.getElementById('readerOverlay').style.display  = 'flex';
   rdShowLoad('กำลังดาวน์โหลด PDF...', 0, '');
 
-  callBackend('getPdfData', { fileId: fileId })
-    .then(function(res) { if (!res || !res.success) { rdErrMsg('โหลดไม่สำเร็จ: ' + (res&&res.error||'unknown')); return; } buildReader(res.data); })
-    .catch(function(err) { rdErrMsg('ข้อผิดพลาด: ' + err.message); });
+  callBackend('getPdfData', { fileId: fileId }).then(function(res) { if (!res || !res.success) { rdErrMsg('โหลดไม่สำเร็จ: ' + (res&&res.error||'unknown')); return; } buildReader(res.data); }).catch(function(err) { rdErrMsg('ข้อผิดพลาด: ' + err.message); });
 }
 
 async function buildReader(b64) {
@@ -381,37 +389,32 @@ async function buildReader(b64) {
 
     var pdf    = await pdfjsLib.getDocument({ data: bytes }).promise;
     var nPages = pdf.numPages;
-    rdMobile   = window.innerWidth < 640;
+    rdMobile   = window.innerWidth < 768; // ต่ำกว่า 768px ถือเป็นมือถือ/แท็บเล็ตแนวตั้ง
 
     var vw = window.innerWidth, vh = window.innerHeight;
-    
-    // 💡 การคำนวณสเกลแบบ "พอดีจอ 100%" (Responsive FIT)
-    // สำหรับมือถือ ลบขอบ 40px, สำหรับ PC ลบขอบ 60px หาร 2 หน้า
-    var padX = rdMobile ? 40 : 60; 
-    var padY = 160; // พื้นที่เมนูบนล่าง
-    var maxW = rdMobile ? (vw - padX) : (vw - padX) / 2;
-    var maxH = vh - padY;
 
-    var pg0 = await pdf.getPage(1);
-    var vp0 = pg0.getViewport({ scale: 1 });
+    var pg0   = await pdf.getPage(1);
+    var vp0   = pg0.getViewport({ scale: 1 });
+    baseW = vp0.width; baseH = vp0.height;
     
-    // หาขนาดที่พอดีเป๊ะ โดยไม่ให้ทะลุกรอบ
-    var scale = Math.min(maxW / vp0.width, maxH / vp0.height);
-    
-    // เรนเดอร์ชัดสูงเพื่อรองรับการซูม
-    var dpr = Math.max(window.devicePixelRatio || 1, 2.0);
-    var renderScale = scale * dpr * 2.5;
+    // 💡 การหาสัดส่วนให้ "พอดีเป๊ะ 100%" (Responsive Fit)
+    // สำหรับมือถือ ลบขอบ 20px (ข้างละ 10px), PC ลบขอบรวม 80px แล้วแบ่งครึ่ง
+    var maxW = rdMobile ? (vw - 20) : (vw - 80) / 2; 
+    var maxH = vh - 130; // ลบแถบเมนูบนล่าง
 
-    rdPageW = vp0.width  * scale;
-    rdPageH = vp0.height * scale;
+    baseScale = Math.min(maxW / baseW, maxH / baseH);
+    
+    // เรนเดอร์ด้วยความละเอียด 2.5 เท่าเผื่อการซูม (ไม่เบลอ)
+    var dpr = Math.max(window.devicePixelRatio || 1, 2.0); 
+    var renderScale = baseScale * dpr * 2.5; 
 
     rdURLs = [];
     for (var p = 1; p <= nPages; p++) {
       var pct = Math.round(p / nPages * 100);
-      rdShowLoad('กำลังปรับความคมชัด...', pct, p + ' / ' + nPages + ' หน้า');
+      rdShowLoad('กำลังโหลดหน้า...', pct, p + ' / ' + nPages + ' หน้า');
       var page = await pdf.getPage(p);
       var vp = page.getViewport({ scale: renderScale });
-      var c = document.createElement('canvas'); c.width = vp.width; c.height = vp.height;
+      var c = document.createElement('canvas'); c.width = Math.ceil(vp.width); c.height = Math.ceil(vp.height);
       await page.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise;
       rdURLs.push(c.toDataURL()); c = null;
     }
@@ -425,24 +428,19 @@ async function buildReader(b64) {
   } catch(err) { rdErrMsg('เกิดข้อผิดพลาด: ' + err.message); }
 }
 
-function fastResizeBook() {
-  var w = rdPageW * rdZoom;
-  var h = rdPageH * rdZoom;
-  var book = document.getElementById('rdBook');
-  var hl = document.getElementById('rdHalfL');
-  var hr = document.getElementById('rdHalfR');
-  var sp = document.getElementById('rdSpine');
+function applyResize() {
+  var w = baseW * baseScale * rdZoom;
+  var h = baseH * baseScale * rdZoom;
+  var bookContainer = document.getElementById('rdBookContainer');
+  var hl = document.getElementById('rdHalfL'); var hr = document.getElementById('rdHalfR'); var sp = document.getElementById('rdSpine');
 
-  // ควบคุมขนาดกระดาษแบบเปอร์เซ็นต์ หน้ากระดาษจะไม่แยกจากกันใน PC
+  // ควบคุมขนาดกระดาษแบบเปอร์เซ็นต์ หน้ากระดาษจะไม่แยกจากกันใน PC แนนอน
   if (rdMobile) {
-    book.style.width = w + 'px';
-    book.style.height = h + 'px';
+    bookContainer.style.width = w + 'px'; bookContainer.style.height = h + 'px';
     hl.style.width = '100%'; hl.style.left = '0';
-    hr.style.display = 'none';
-    if(sp) sp.style.display = 'none';
+    hr.style.display = 'none'; if(sp) sp.style.display = 'none';
   } else {
-    book.style.width = (w * 2) + 'px';
-    book.style.height = h + 'px';
+    bookContainer.style.width = (w * 2) + 'px'; bookContainer.style.height = h + 'px';
     hl.style.width = '50%'; hl.style.left = '0';
     hr.style.display = 'block'; hr.style.width = '50%'; hr.style.left = '50%';
     if(sp) { sp.style.display = 'block'; sp.style.left = 'calc(50% - 2px)'; sp.style.width = '4px'; }
@@ -457,7 +455,6 @@ function rdFillHalf(id, idx) {
   var el = document.getElementById(id); el.innerHTML = '';
   if (idx >= 0 && idx < rdURLs.length) {
     var img = new Image(); img.src = rdURLs[idx];
-    img.style.cssText = 'display:block; width:100%; height:100%; object-fit:cover;';
     el.appendChild(img);
   }
 }
@@ -472,19 +469,34 @@ function rdUpdateInfo() {
 }
 
 // ════════════════════════════════════════
-// 🔍 ZOOM LOGIC (อิสระและย่อได้)
+// 🔍 ZOOM LOGIC (อิสระและย่อได้ ไม่ยื้อศูนย์กลาง)
 // ════════════════════════════════════════
 const MIN_ZOOM = 0.4; // ลดได้ถึง 40%
 const MAX_ZOOM = 5.0; // ขยายได้ 500%
 
 function rdZoomIn()    { rdSetZoom(rdZoom + 0.25); }
 function rdZoomOut()   { rdSetZoom(rdZoom - 0.25); }
-function rdZoomReset() { rdSetZoom(1.0); }
+function rdZoomReset() { rdSetZoom(1.0); } // รีเซ็ต 100%
 
-function rdSetZoom(newZoom) {
+function rdSetZoom(newZoom, cx = null, cy = null) {
+  const scroll = document.getElementById('rdScroll');
+  
+  if (cx === null) cx = scroll.clientWidth / 2;
+  if (cy === null) cy = scroll.clientHeight / 2;
+
+  const beforeX = scroll.scrollLeft + cx;
+  const beforeY = scroll.scrollTop + cy;
+
+  const oldZoom = rdZoom;
   rdZoom = Math.max(MIN_ZOOM, Math.min(newZoom, MAX_ZOOM));
   document.getElementById('zoomLabel').textContent = Math.round(rdZoom*100) + '%';
-  fastResizeBook();
+
+  applyResize();
+
+  // ขยับ Scroll เพื่อรักษาจุดโฟกัส 
+  const zoomRatio = rdZoom / oldZoom;
+  scroll.scrollLeft = (beforeX * zoomRatio) - cx;
+  scroll.scrollTop  = (beforeY * zoomRatio) - cy;
 }
 
 // ════════════════════════════════════════
@@ -528,7 +540,7 @@ function rdCommit(dir) {
   setTimeout(function() {
     if (rdMobile) { rdLeft=rdD.nL; rdRight=-1; } else { rdLeft=rdD.nL; rdRight=rdD.nR; }
     document.getElementById('rdHalfL').style.visibility=''; document.getElementById('rdHalfR').style.visibility='';
-    fe.style.display='none'; fe.style.transition='none'; fastResizeBook(); rdFlipping=false;
+    fe.style.display='none'; fe.style.transition='none'; applyResize(); rdFlipping=false;
   }, 390);
 }
 
@@ -546,16 +558,19 @@ function rdGoNext() { if (rdFlipping || rdD.on) return; var canNext = rdMobile ?
 function rdGoPrev() { if (rdFlipping || rdD.on) return; var canPrev = rdMobile ? rdLeft>0 : rdLeft>=0; if (!canPrev) return; rdSetupFlip('prev'); rdCommit('prev'); }
 
 // ════════════════════════════════════════
-// 🖐️ GESTURE CONTROL (Touch Flip Only)
+// 🖐️ GESTURE CONTROL (Pinch-to-zoom & Native Pan)
 // ════════════════════════════════════════
 (function() {
-  var book = document.getElementById('rdBook');
-  var touchStartX = 0;
+  var book = document.getElementById('rdBookContainer');
+  var scroll = document.getElementById('rdScroll');
+  book.style.cursor = 'grab';
+
+  var pinchInitDist = 0; var pinchInitZoom = 1; var pinchCentroid = {x:0, y:0};
 
   function startDrag(clientX) {
     if (rdFlipping || rdURLs.length === 0 || rdD.on) return false;
     
-    // 💡 ล็อกการพลิกหน้า: จะพลิกได้ก็ต่อเมื่อไม่ได้ซูมอยู่ (Zoom = 100%)
+    // 💡 ถ้าไม่ได้ซูม 100% ห้ามพลิก เพื่อให้นิ้วเลื่อนจอดูได้อิสระ
     if (rdZoom !== 1.0) return false; 
 
     var rect = book.getBoundingClientRect();
@@ -564,20 +579,16 @@ function rdGoPrev() { if (rdFlipping || rdD.on) return; var canPrev = rdMobile ?
 
     var canNext = rdMobile ? rdLeft+1 < rdURLs.length : (rdRight >= 0 && rdRight < rdURLs.length);
     var canPrev = rdMobile ? rdLeft > 0 : rdLeft >= 0;
-    if (dir==='next' && !canNext && canPrev) dir = 'prev';
-    if (dir==='prev' && !canPrev && canNext) dir = 'next';
-    if (dir==='next' && !canNext) return false;
-    if (dir==='prev' && !canPrev) return false;
+    if (dir==='next' && !canNext && canPrev) dir = 'prev'; if (dir==='prev' && !canPrev && canNext) dir = 'next';
+    if (dir==='next' && !canNext) return false; if (dir==='prev' && !canPrev) return false;
 
-    rdSetupFlip(dir);
-    rdD.on = true; rdD.dir = dir; rdD.sx = clientX; rdD.angle = 0;
-    return true;
+    rdSetupFlip(dir); rdD.on = true; rdD.dir = dir; rdD.sx = clientX; rdD.angle = 0; return true;
   }
 
   function moveDrag(clientX) {
     if (!rdD.on) return;
     var dx = clientX - rdD.sx;
-    var pageW = rdMobile ? (rdPageW * rdZoom) : (rdPageW * rdZoom * 2);
+    var pageW = rdMobile ? (baseW * baseScale * rdZoom) : (baseW * baseScale * rdZoom * 2);
     var pct = Math.abs(dx) / Math.max(pageW, 1);
     var ang = 0;
     if (rdD.dir === 'next' && dx < 0) ang = Math.max(-180, pct * -180);
@@ -587,34 +598,47 @@ function rdGoPrev() { if (rdFlipping || rdD.on) return; var canPrev = rdMobile ?
     document.getElementById('rdFlipShade').style.opacity = String(Math.min(0.9, Math.abs(ang) / 90));
   }
 
-  function endDrag() {
-    if (!rdD.on) return;
-    rdD.on = false; 
-    if (Math.abs(rdD.angle) > 60) rdCommit(rdD.dir); else rdCancel();
-  }
+  function endDrag() { if (!rdD.on) return; rdD.on = false; book.style.cursor = 'grab'; if (Math.abs(rdD.angle) > 60) rdCommit(rdD.dir); else rdCancel(); }
 
-  // จับพลิกหน้า (1 นิ้ว)
-  book.addEventListener('touchstart', function(e) {
-    if (e.touches.length === 1 && rdZoom === 1.0) { 
-      touchStartX = e.touches[0].clientX;
-      startDrag(touchStartX); 
-    }
-  }, { passive: true });
-
-  book.addEventListener('touchmove', function(e) {
-    if (rdD.on) {
-      if (e.cancelable) e.preventDefault(); // ป้องกันจอสั่นเวลาพลิก
-      moveDrag(e.touches[0].clientX);
+  // 2 นิ้วถ่างซูม (Pinch to zoom)
+  scroll.addEventListener('touchstart', function(e) {
+    if (e.touches.length === 2) {
+      rdD.on = false; 
+      var t1 = e.touches[0], t2 = e.touches[1];
+      pinchInitDist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+      pinchInitZoom = rdZoom;
+      var rect = scroll.getBoundingClientRect();
+      pinchCentroid.x = ((t1.clientX + t2.clientX) / 2) - rect.left;
+      pinchCentroid.y = ((t1.clientY + t2.clientY) / 2) - rect.top;
     }
   }, { passive: false });
 
-  book.addEventListener('touchend', function(e) { if (rdD.on) endDrag(); }, { passive: true });
+  scroll.addEventListener('touchmove', function(e) {
+    if (e.touches.length === 2 && pinchInitDist > 0) {
+      e.preventDefault(); 
+      var t1 = e.touches[0], t2 = e.touches[1];
+      var dist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+      rdSetZoom(pinchInitZoom * (dist / pinchInitDist), pinchCentroid.x, pinchCentroid.y);
+    }
+  }, { passive: false });
+
+  scroll.addEventListener('touchend', function(e) { if (e.touches.length < 2) pinchInitDist = 0; }, { passive: true });
+
+  // จับพลิกหน้า (1 นิ้ว)
+  book.addEventListener('touchstart', function(e) { if (e.touches.length === 1 && !pinchInitDist) { startDrag(e.touches[0].clientX); } }, { passive: true });
+  book.addEventListener('touchmove', function(e) {
+    if (!rdD.on) return; 
+    var dx = e.touches[0].clientX - rdD.sx;
+    if (Math.abs(dx) > 8 && e.cancelable) { e.preventDefault(); }
+    moveDrag(e.touches[0].clientX);
+  }, { passive: false });
+  book.addEventListener('touchend', function(e) { if (e.touches.length === 0) endDrag(); }, { passive: true });
   book.addEventListener('touchcancel', function() { if (rdD.on) { rdD.on = false; rdCancel(); } }, { passive: true });
 
   // ฝั่ง PC Mouse
-  book.addEventListener('mousedown', function(e) { if (startDrag(e.clientX)) { e.preventDefault(); } });
+  book.addEventListener('mousedown', function(e) { if (startDrag(e.clientX)) { e.preventDefault(); book.style.cursor = 'grabbing'; } });
   document.addEventListener('mousemove', function(e) { if (rdD.on) moveDrag(e.clientX); });
-  document.addEventListener('mouseup', function() { endDrag(); });
+  document.addEventListener('mouseup', function() { endDrag(); book.style.cursor='grab'; });
 })();
 
 function closeReader() {
@@ -622,7 +646,7 @@ function closeReader() {
   document.getElementById('rdTitleSpinner').style.display = 'none';
   document.getElementById('rdFlipEl').style.display = 'none';
   document.getElementById('rdHalfL').innerHTML = ''; document.getElementById('rdHalfR').innerHTML = '';
-  document.getElementById('rdBook').style.cssText = '';
+  document.getElementById('rdBookContainer').style.width = '0px';
   rdURLs=[]; rdLeft=-1; rdRight=0; rdFlipping=false; rdZoom=1.0;
   document.getElementById('rdLoading').style.display = 'flex';
 }
@@ -636,14 +660,16 @@ function rdShowLoad(msg, pct, sub) {
 }
 function rdErrMsg(msg) {
   document.getElementById('rdTitleSpinner').style.display = 'none';
-  document.getElementById('rdLoading').innerHTML = '<i class="fas fa-exclamation-circle" style="font-size:48px;color:#f87171;margin-bottom:16px;"></i><p style="color:#f87171;font-size:14px;font-family:Kanit;max-width:280px;">' + msg + '</p><button onclick="closeReader()" style="margin-top:20px;background:#f87171;color:white;border:none;border-radius:20px;padding:8px 24px;font-family:Kanit;cursor:pointer;">ปิด</button>';
+  var el = document.getElementById('rdLoading');
+  el.innerHTML = '<i class="fas fa-exclamation-circle" style="font-size:48px;color:#f87171;margin-bottom:16px;"></i><p style="color:#f87171;font-size:14px;font-family:Kanit;max-width:280px;">' + msg + '</p><button onclick="closeReader()" style="margin-top:20px;background:#f87171;color:white;border:none;border-radius:20px;padding:8px 24px;font-family:Kanit;cursor:pointer;">ปิด</button>';
+  el.style.display = 'flex';
 }
 
 // ════════════════════════════════════════
 // CRUD & SHARE
 // ════════════════════════════════════════
 function shareBook(url, title) {
-  if (!url) { Swal.fire({ icon:'info', title:'ไม่มีลิงค์ไฟล์', confirmButtonColor:'#00B900' }); return; }
+  if (!url) { Swal.fire({ icon:'info', title:'ไม่มีลิงค์ไฟล์', confirmButtonColor:'#059669' }); return; }
   var lineUrl = 'https://line.me/R/msg/text/?' + encodeURIComponent('📚 ' + title + '\n\n' + url);
   Swal.fire({
     title: '<span style="font-family:Kanit;color:#00B900"><i class="fab fa-line mr-2"></i>แชร์หนังสือ</span>',
@@ -652,7 +678,7 @@ function shareBook(url, title) {
   }).then(function(r) {
     if (r.isConfirmed) { window.open(lineUrl, '_blank'); }
     else if (r.isDenied) {
-      if (navigator.clipboard) { navigator.clipboard.writeText(url).then(function() { Swal.fire({ icon:'success', title:'คัดลอกแล้ว!', timer:1200, showConfirmButton:false }); }); } else { fallbackCopy(url); }
+      if (navigator.clipboard) { navigator.clipboard.writeText(url).then(function() { Swal.fire({ icon:'success', title:'คัดลอกแล้ว!', timer:1200, showConfirmButton:false }); }).catch(function() { fallbackCopy(url); }); } else { fallbackCopy(url); }
     }
   });
 }
@@ -674,7 +700,8 @@ function submitData(info) {
 
 function confirmDelete(rowIndex, fileId) {
   Swal.fire({
-    title: '<span style="font-family:Kanit">ยืนยันการลบ</span>', icon: 'warning', showCancelButton: true, confirmButtonColor: '#ef4444', cancelButtonColor: '#6b7280', confirmButtonText: '<i class="fas fa-trash mr-1"></i> ลบเลย', cancelButtonText: 'ยกเลิก', focusConfirm: false,
+    title: '<span style="font-family:Kanit">ยืนยันการลบ</span>',
+    icon: 'warning', showCancelButton: true, confirmButtonColor: '#ef4444', cancelButtonColor: '#6b7280', confirmButtonText: '<i class="fas fa-trash mr-1"></i> ลบเลย', cancelButtonText: 'ยกเลิก', focusConfirm: false,
   }).then(function(r) {
     if (!r.isConfirmed) return;
     Swal.fire({ title:'กำลังลบ...', allowOutsideClick:false, didOpen:function(){ Swal.showLoading(); } });
