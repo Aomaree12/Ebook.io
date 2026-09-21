@@ -368,13 +368,22 @@ function callBackend(action, payload = {}) {
       else if (action === 'saveBook') { google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).saveBook(payload); }
       else if (action === 'deleteBook') { google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).deleteBook(payload.rowIndex, payload.fileId); }
     } else {
-      fetch(GAS_URL + "?action=" + action, { method: "POST", body: JSON.stringify(payload), headers: { "Content-Type": "text/plain;charset=utf-8" }
-      }).then(function(res) { return res.text(); }).then(function(txt) {
-        var data;
-        try { data = JSON.parse(txt); }
-        catch (e) { throw new Error('เซิร์ฟเวอร์ตอบกลับไม่ใช่ข้อมูล (' + (/^\s*</.test(txt) ? 'ได้หน้า HTML — ตรวจว่า Deploy Apps Script เป็นเวอร์ชันใหม่ และตั้งสิทธิ์เป็น "ทุกคน"' : txt.slice(0, 80)) + ')'); }
-        if (data && (data.error || data.success === false)) reject(new Error(data.error || data.message)); else resolve(data);
-      }).catch(reject);
+      // อ่านข้อมูล (getBooks/getPdfData) ลองซ้ำอัตโนมัติได้ เพราะไม่ทำให้ข้อมูลซ้ำ; saveBook/deleteBook ไม่ลองซ้ำเอง
+      var maxTry = (action === 'getBooks' || action === 'getPdfData') ? 4 : 1;
+      var body = JSON.stringify(payload);
+      (function attempt(n) {
+        fetch(GAS_URL + "?action=" + action, { method: "POST", body: body, headers: { "Content-Type": "text/plain;charset=utf-8" }
+        }).then(function(res) { return res.text(); }).then(function(txt) {
+          var data;
+          try { data = JSON.parse(txt); }
+          catch (e) { throw new Error(/^\s*</.test(txt) ? 'HTML' : txt.slice(0, 80)); }
+          if (data && (data.error || data.success === false)) reject(new Error(data.error || data.message)); else resolve(data);
+        }).catch(function(err) {
+          if (n < maxTry) { setTimeout(function() { attempt(n + 1); }, 700 * n); return; }   // หน่วง 0.7s, 1.4s, 2.1s แล้วลองใหม่
+          if (err.message === 'HTML') err = new Error('เซิร์ฟเวอร์ (Google) ตอบกลับไม่ทัน/ไม่ใช่ข้อมูล — ลองกดอีกครั้ง หากเป็นบ่อยให้ตรวจการ Deploy และสิทธิ์ "ทุกคน" ของ Apps Script');
+          reject(err);
+        });
+      })(1);
     }
   });
 }
