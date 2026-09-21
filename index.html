@@ -348,8 +348,8 @@ const GAS_URL = 'https://script.google.com/macros/s/AKfycbygfy7yad290Ox_Kdat3HqL
 
 // ชื่อคอลัมน์ในชีตที่เก็บภาพตัวอย่าง (Apps Script จะสร้างให้อัตโนมัติถ้ายังไม่มี)
 var PREVIEW_COL = 'Preview Image';
-// ขีดจำกัดของ Google Sheets = 50,000 ตัวอักษรต่อเซลล์
-var PREVIEW_MAX_CHARS = 45000;
+// ภาพตัวอย่างเก็บเป็นไฟล์ใน Google Drive (ไม่ใช่ในเซลล์) จึงใช้ความละเอียดสูงได้
+var PREVIEW_MAX_CHARS = 1200000;
 
 var BOOKS_PER_SHELF = 4;
 var PALETTE = [
@@ -562,8 +562,8 @@ var formPreview = { data: '', changed: false, custom: false };
 
 // วาดภาพลงผืนผ้าใบขนาดเล็ก แล้วบีบเป็น JPEG ให้เล็กกว่าขีดจำกัดของเซลล์ชีต
 function compressToJpeg(source, srcW, srcH) {
-  var widths = [640, 560, 480, 420, 360, 300, 250, 210];
-  var quals  = [0.75, 0.6, 0.45, 0.32];
+  var widths = [1100, 900, 720, 560];
+  var quals  = [0.9, 0.8, 0.7];
   var last = '';
   for (var wi = 0; wi < widths.length; wi++) {
     var w = Math.min(widths[wi], srcW);
@@ -586,7 +586,7 @@ async function pdfBytesToPreview(bytes, pageNum) {
   var n = Math.min(Math.max(1, parseInt(pageNum) || 1), pdf.numPages);
   var page = await pdf.getPage(n);
   var vp1 = page.getViewport({ scale: 1 });
-  var vp  = page.getViewport({ scale: 700 / vp1.width }); // เรนเดอร์ใหญ่ก่อน แล้วค่อยย่อให้คม
+  var vp  = page.getViewport({ scale: 1500 / vp1.width }); // เรนเดอร์ใหญ่ก่อน แล้วค่อยย่อให้คม
   var c = document.createElement('canvas'); c.width = vp.width; c.height = vp.height;
   var ctx = c.getContext('2d');
   ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height);
